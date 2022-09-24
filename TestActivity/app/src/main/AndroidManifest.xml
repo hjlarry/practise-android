@@ -21,6 +21,7 @@
         </activity>
         <activity
             android:name=".FirstActivity"
+            android:launchMode="singleTop"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"

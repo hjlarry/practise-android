@@ -1,7 +1,5 @@
 package com.example.testactivity
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,12 +9,13 @@ import android.net.Uri
 import android.util.Log
 import com.example.testactivity.databinding.MyfirstLayoutBinding
 
-@SuppressLint("StaticFieldLeak")
-private lateinit var binding: MyfirstLayoutBinding
 
-class FirstActivity : AppCompatActivity() {
+class FirstActivity : BaseActivity() {
+    private lateinit var binding: MyfirstLayoutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("FirstActivity", this.toString())
 
         binding = MyfirstLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -29,7 +28,7 @@ class FirstActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.button3.setOnClickListener{
+        binding.button3.setOnClickListener {
             val indent = Intent(this, SecondActivity::class.java)
             indent.putExtra("some_data", 12345689)
             startActivityForResult(indent, 1)
@@ -38,6 +37,11 @@ class FirstActivity : AppCompatActivity() {
         binding.button4.setOnClickListener {
             val indent = Intent(Intent.ACTION_DIAL)
             indent.data = Uri.parse("tel:10040")
+            startActivity(indent)
+        }
+
+        binding.button5.setOnClickListener {
+            val indent = Intent(this, FirstActivity::class.java)
             startActivity(indent)
         }
     }
@@ -55,11 +59,11 @@ class FirstActivity : AppCompatActivity() {
         return true
     }
 
-//    TODO: https://segmentfault.com/a/1190000037601888
+    //    TODO: https://segmentfault.com/a/1190000037601888
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            1 -> if(resultCode == RESULT_OK) {
+        when (requestCode) {
+            1 -> if (resultCode == RESULT_OK) {
                 val returnData = data?.getStringExtra("back_data")
                 Log.d("first_activity", "this is return: $returnData")
             }

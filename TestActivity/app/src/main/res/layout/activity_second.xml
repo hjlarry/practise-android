@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondActivity">
+    tools:context=".SecondActivity"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="返回并传递数据"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/closebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="注销所有activity并杀进程"
         tools:ignore="MissingConstraints" />
 </LinearLayout>
