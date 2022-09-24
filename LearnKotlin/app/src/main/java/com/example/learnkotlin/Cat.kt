@@ -1,4 +1,4 @@
-package com.example.kotlin
+package com.example.learnkotlin
 
 open class Animal(var age:Int) {
     var name = ""
