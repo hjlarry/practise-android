@@ -1,33 +1,37 @@
 package com.example.viewtest
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.viewtest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val button = findViewById<Button>(R.id.button)
-        val img = findViewById<ImageView>(R.id.imageView)
-        button.setOnClickListener(this)
-        img.setOnClickListener(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+
+        binding.button.setOnClickListener(this)
+        binding.imageView.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.button -> {
-//                val text = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
-//                Toast.makeText(this, text, Toast.LENGTH_LONG).show()
-//                val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-//                progressBar.progress = progressBar.progress + 10
+                val text = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
+                Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+                val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+                progressBar.progress = progressBar.progress + 10
                 val dialog = AlertDialog.Builder(this).run {
                     setTitle("This is a Dialog")
                     setMessage("Some important thing")
@@ -39,8 +43,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 dialog.show()
             }
             R.id.imageView -> {
-                findViewById<ImageView>(R.id.imageView).apply { setImageResource(R.drawable.img_2) }
+                binding.imageView.apply { setImageResource(R.drawable.img_2) }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.actions, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+        R.id.linear ->{
+            startActivity(Intent(this, Linearlayout::class.java))
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 }
