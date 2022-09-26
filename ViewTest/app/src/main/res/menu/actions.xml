@@ -8,4 +8,7 @@
         app:showAsAction="never" />
     <item android:id="@+id/relative"
         android:title="relative layout" />
+
+    <item android:id="@+id/custom"
+        android:title="custom layout" />
 </menu>

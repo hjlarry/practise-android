@@ -62,6 +62,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, RelativeLayout::class.java))
             true
         }
+        R.id.custom ->{
+            startActivity(Intent(this, CustomLayout::class.java))
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 }
