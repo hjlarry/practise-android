@@ -11,4 +11,7 @@
 
     <item android:id="@+id/custom"
         android:title="custom layout" />
+
+    <item android:id="@+id/listview"
+        android:title="List View" />
 </menu>

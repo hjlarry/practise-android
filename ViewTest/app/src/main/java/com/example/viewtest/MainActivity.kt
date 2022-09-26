@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, CustomLayout::class.java))
             true
         }
+        R.id.listview ->{
+            startActivity(Intent(this, ListView::class.java))
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 }
