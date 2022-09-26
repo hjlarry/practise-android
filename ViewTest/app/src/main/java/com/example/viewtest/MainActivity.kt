@@ -55,7 +55,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
         R.id.linear ->{
-            startActivity(Intent(this, Linearlayout::class.java))
+            startActivity(Intent(this, LinearLayout::class.java))
+            true
+        }
+        R.id.relative ->{
+            startActivity(Intent(this, RelativeLayout::class.java))
             true
         }
         else -> super.onOptionsItemSelected(item)
