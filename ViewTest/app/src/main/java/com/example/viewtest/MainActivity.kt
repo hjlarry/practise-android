@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, MyRecyclerView::class.java))
             true
         }
+        R.id.chat ->{
+            startActivity(Intent(this, Chat::class.java))
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 }

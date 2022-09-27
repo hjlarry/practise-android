@@ -17,4 +17,7 @@
 
     <item android:id="@+id/recycleview"
         android:title="Recycle View" />
+
+    <item android:id="@+id/chat"
+        android:title="Chat" />
 </menu>

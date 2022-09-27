@@ -13,6 +13,13 @@
         android:theme="@style/Theme.ViewTest"
         tools:targetApi="31">
         <activity
+            android:name=".Chat"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".MyRecyclerView"
             android:exported="false">
             <meta-data
