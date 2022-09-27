@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, ListView::class.java))
             true
         }
+        R.id.recycleview ->{
+            startActivity(Intent(this, MyRecyclerView::class.java))
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 }
