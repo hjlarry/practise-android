@@ -15,13 +15,18 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+/*
+当前通过layout-large文件夹，large的设备则自动加载这个文件夹的xml
+也可新建一个layout-sw600dp文件夹，则程序运行在屏幕宽度大于等于600dp的设备时，加载该布局
+ */
+
         setContentView(R.layout.activity_main)
 
-        val btn = findViewById<View>(R.id.button)
-        btn.setOnClickListener{
-            replaceFragment(AnotherRightFragment())
-        }
-        replaceFragment(RightFragment())
+//        val btn = findViewById<View>(R.id.button)
+//        btn.setOnClickListener{
+//            replaceFragment(AnotherRightFragment())
+//        }
+//        replaceFragment(RightFragment())
     }
 
     private fun replaceFragment(fragment: Fragment){
