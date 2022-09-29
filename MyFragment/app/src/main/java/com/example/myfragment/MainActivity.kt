@@ -2,6 +2,7 @@ package com.example.myfragment
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,10 +23,15 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-//        val btn = findViewById<View>(R.id.button)
-//        btn.setOnClickListener{
-//            replaceFragment(AnotherRightFragment())
-//        }
+        val btn = findViewById<View>(R.id.toNews)
+        btn.setOnClickListener{
+            startActivity(Intent(this, NewsActivity::class.java))
+        }
+
+        val btn2 = findViewById<View>(R.id.button)
+        btn2.setOnClickListener{
+            replaceFragment(AnotherRightFragment())
+        }
 //        replaceFragment(RightFragment())
     }
 
@@ -73,6 +79,16 @@ class RightFragment: Fragment(){
         return inflater.inflate(R.layout.right_fragment, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated")
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Log.d(TAG, "onViewStateRestored")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated")
@@ -96,6 +112,11 @@ class RightFragment: Fragment(){
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState")
     }
 
     override fun onDestroyView() {
