@@ -1,8 +1,5 @@
 package com.example.learnkotlin
 
-class Functions {
-}
-
 fun notUseWith(){
     val list = listOf<String>("apple", "oriange", "Pear")
     val builder = StringBuilder()
@@ -67,4 +64,35 @@ fun main(){
     UseRun()
     println("-------------------UseApply()-----------------")
     UseApply()
+    println("-------------------扩展函数-----------------")
+    testLetterCount()
+}
+
+// 传统写法，计算字符串包含的字母数
+object StringUtil{
+    fun letterCount(str:String):Int{
+        var count = 0
+        for (char in str){
+            if(char.isLetter()){
+                count ++
+            }
+        }
+        return count
+    }
+}
+// 扩展函数，能不修改类的源码，给其添加额外的函数
+fun String.lettersCount():Int{
+    var count = 0
+    for (char in this){
+        if(char.isLetter()){
+            count ++
+        }
+    }
+    return count
+}
+
+fun testLetterCount(){
+    val someStr = "abc123!@#"
+    println(StringUtil.letterCount(someStr))
+    println(someStr.lettersCount())
 }
