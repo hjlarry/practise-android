@@ -30,6 +30,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".AnotherBroadcastReciver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="100">
+                <action android:name="com.example.broadcasttest.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

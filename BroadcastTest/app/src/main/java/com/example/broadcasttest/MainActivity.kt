@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         btn.setOnClickListener {
             val intent = Intent("com.example.broadcasttest.MY_BROADCAST")
             intent.setPackage(packageName)
-            sendBroadcast(intent)
+            sendOrderedBroadcast(intent, null)
         }
     }
 
@@ -45,5 +45,13 @@ class TimeChangeReceiver : BroadcastReceiver() {
 class MyBroadcastReciver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Toast.makeText(context, "received my broadcast", Toast.LENGTH_LONG).show()
+    }
+}
+
+// 有序广播可以在androidManifest中设定广播的优先级，并可以阻断后续广播的运行
+class AnotherBroadcastReciver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        Toast.makeText(context, "received in another broadcast", Toast.LENGTH_SHORT).show()
+        abortBroadcast()
     }
 }
