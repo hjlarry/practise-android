@@ -7,13 +7,23 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/SendBroadcast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send broadcast!"
+        android:text="Send broadcast"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/forceOffline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Force Offline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SendBroadcast" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
