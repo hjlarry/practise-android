@@ -56,6 +56,24 @@ fun UseApply() {
     println(result.toString())
 }
 
+fun StringBuilder.build(block: StringBuilder.() -> Unit): StringBuilder {
+    block()
+    return this
+}
+
+// 自己实现一个和apply用法一样的函数
+fun UseApply2() {
+    val list = listOf<String>("apple", "oriange", "Pear")
+    val result = StringBuilder().build {
+        append("Start eating friuts: \n")
+        for (fruit in list) {
+            append(fruit).append('\n')
+        }
+        append("ear all friuts")
+    }
+    println(result.toString())
+}
+
 fun main() {
     notUseWith()
     println("-------------------UseWith()-----------------")
@@ -64,6 +82,8 @@ fun main() {
     UseRun()
     println("-------------------UseApply()-----------------")
     UseApply()
+    println("-------------------UseApply2()-----------------")
+    UseApply2()
     println("-------------------扩展函数-----------------")
     testLetterCount()
     println("-------------------高阶函数-----------------")
@@ -122,3 +142,4 @@ fun n1n2lambda() {
     println("with lambda $result1")
     println("with lambda $result2")
 }
+
