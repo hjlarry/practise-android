@@ -31,6 +31,20 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "load success", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.savebtn2.setOnClickListener {
+            val editor = getSharedPreferences("cdata", Context.MODE_PRIVATE).edit()
+            editor.putString("hello", "world")
+            editor.putBoolean("abc", true)
+            editor.putInt("age", 28)
+            editor.apply()
+        }
+
+        binding.loadbtn2.setOnClickListener {
+            val prefs = getSharedPreferences("cdata", Context.MODE_PRIVATE)
+            val age = prefs.getInt("age", 0)
+            Toast.makeText(this, "age is $age", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
