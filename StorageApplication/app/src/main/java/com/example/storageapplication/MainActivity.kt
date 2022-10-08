@@ -1,5 +1,6 @@
 package com.example.storageapplication
 
+import android.content.ContentValues
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -50,6 +51,28 @@ class MainActivity : AppCompatActivity() {
         val dbHelper = MyDatabaseHelper(this, "mybook.db", 21)
         binding.createdb.setOnClickListener {
             dbHelper.writableDatabase
+        }
+
+        val db = dbHelper.writableDatabase
+        binding.insert.setOnClickListener {
+            val values1 = ContentValues().apply {
+                put("name", "abc")
+                put("pages", 452)
+            }
+            db.insert("Book", null, values1)
+            val values2 = ContentValues().apply {
+                put("name", "def")
+                put("pages", 453)
+            }
+            db.insert("Book", null, values2)
+            Toast.makeText(this, "Insert success", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.update.setOnClickListener {
+            val values = ContentValues()
+            values.put("price", 1.23)
+            db.update("Book", values, "name=? and pages=?", arrayOf("def", "453"))
+            Toast.makeText(this, "Update success", Toast.LENGTH_SHORT).show()
         }
     }
 
