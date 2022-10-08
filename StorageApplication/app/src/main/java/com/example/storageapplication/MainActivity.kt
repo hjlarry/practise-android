@@ -2,6 +2,7 @@ package com.example.storageapplication
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -34,12 +35,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.savebtn2.setOnClickListener {
-            val editor = getSharedPreferences("cdata", Context.MODE_PRIVATE).edit()
-            editor.putString("hello", "world")
-            editor.putBoolean("abc", true)
-            editor.putInt("age", 28)
+        //        binding.savebtn2.setOnClickListener {
+//            val editor = getSharedPreferences("cdata", Context.MODE_PRIVATE).edit()
+//            editor.putString("hello", "world")
+//            editor.putBoolean("abc", true)
+//            editor.putInt("age", 28)
+//            editor.apply()
+//        }
+//        高阶函数写法:
+        fun SharedPreferences.open(block: SharedPreferences.Editor.() -> Unit) {
+            val editor = edit()
+            editor.block()
             editor.apply()
+        }
+        binding.savebtn2.setOnClickListener {
+            getSharedPreferences("cdata", Context.MODE_PRIVATE).open {
+                putString("hello", "world")
+                putBoolean("abc", true)
+                putInt("age", 290)
+            }
         }
 
         binding.loadbtn2.setOnClickListener {
@@ -54,19 +68,41 @@ class MainActivity : AppCompatActivity() {
         }
 
         val db = dbHelper.writableDatabase
+//        binding.insert.setOnClickListener {
+//            val values1 = ContentValues().apply {
+//                put("name", "abc")
+//                put("pages", 452)
+//            }
+//            db.insert("Book", null, values1)
+//            val values2 = ContentValues().apply {
+//                put("name", "def")
+//                put("pages", 453)
+//            }
+//            db.insert("Book", null, values2)
+//            Toast.makeText(this, "Insert success", Toast.LENGTH_SHORT).show()
+//        }
+
+        //        高级函数，其实也是KTX库中 contentValuesOf()的实现方式
+        fun cvOf(vararg pairs: Pair<String, Any?>) = ContentValues().apply {
+            for (pair in pairs) {
+                val key = pair.first
+                val value = pair.second
+                when (value) {
+                    is Int -> put(key, value)
+                    is Boolean -> put(key, value)
+                    is String -> put(key, value)
+                }
+            }
+        }
+
         binding.insert.setOnClickListener {
-            val values1 = ContentValues().apply {
-                put("name", "abc")
-                put("pages", 452)
-            }
+            val values1 = cvOf("name" to "abc", "pages" to 452)
             db.insert("Book", null, values1)
-            val values2 = ContentValues().apply {
-                put("name", "def")
-                put("pages", 453)
-            }
+            val values2 = cvOf("name" to "def", "pages" to 453)
             db.insert("Book", null, values2)
             Toast.makeText(this, "Insert success", Toast.LENGTH_SHORT).show()
         }
+
 
         binding.update.setOnClickListener {
             val values = ContentValues()
