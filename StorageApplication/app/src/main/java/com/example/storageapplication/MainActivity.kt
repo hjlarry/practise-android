@@ -3,6 +3,7 @@ package com.example.storageapplication
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.storageapplication.databinding.ActivityMainBinding
 import java.io.BufferedReader
@@ -44,6 +45,11 @@ class MainActivity : AppCompatActivity() {
             val prefs = getSharedPreferences("cdata", Context.MODE_PRIVATE)
             val age = prefs.getInt("age", 0)
             Toast.makeText(this, "age is $age", Toast.LENGTH_SHORT).show()
+        }
+
+        val dbHelper = MyDatabaseHelper(this, "mybook.db", 21)
+        binding.createdb.setOnClickListener {
+            dbHelper.writableDatabase
         }
     }
 
