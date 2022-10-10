@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity() {
                 call()
             }
         }
+
+        val readContact = findViewById<View>(R.id.readContact)
+        readContact.setOnClickListener {
+            val intent = Intent(this, ContactActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onRequestPermissionsResult(
