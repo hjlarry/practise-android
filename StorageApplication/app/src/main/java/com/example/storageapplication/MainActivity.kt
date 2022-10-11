@@ -1,40 +1,35 @@
 package com.example.storageapplication
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.storageapplication.databinding.ActivityMainBinding
-import java.io.BufferedReader
-import java.io.BufferedWriter
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.savebtn.setOnClickListener {
-            val text = binding.editText.text.toString()
-            save(text)
-        }
+        rwlocal()
 
-        binding.loadbtn.setOnClickListener {
-            val inputText = load()
-            if (inputText.isNotEmpty()) {
-                binding.editText.setText(inputText)
-                binding.editText.setSelection(inputText.length)
-                Toast.makeText(this, "load success", Toast.LENGTH_SHORT).show()
-            }
-        }
+        rwSharedPreferences()
 
+        addData()
+
+        queryDB()
+    }
+
+    private fun rwSharedPreferences() {
         //        binding.savebtn2.setOnClickListener {
 //            val editor = getSharedPreferences("cdata", Context.MODE_PRIVATE).edit()
 //            editor.putString("hello", "world")
@@ -61,7 +56,53 @@ class MainActivity : AppCompatActivity() {
             val age = prefs.getInt("age", 0)
             Toast.makeText(this, "age is $age", Toast.LENGTH_SHORT).show()
         }
+    }
 
+    private fun rwlocal() {
+        binding.savebtn.setOnClickListener {
+            val text = binding.editText.text.toString()
+            save(text)
+        }
+
+        binding.loadbtn.setOnClickListener {
+            val inputText = load()
+            if (inputText.isNotEmpty()) {
+                binding.editText.setText(inputText)
+                binding.editText.setSelection(inputText.length)
+                Toast.makeText(this, "load success", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun save(text: String) {
+        try {
+            val output = openFileOutput("mydata", Context.MODE_PRIVATE)
+            val writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                it.write(text)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun load(): String {
+        val content = StringBuilder()
+        try {
+            val input = openFileInput("mydata")
+            val reader = BufferedReader(InputStreamReader(input))
+            reader.use {
+                reader.forEachLine {
+                    content.append(it)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return content.toString()
+    }
+
+    private fun addData() {
         val dbHelper = MyDatabaseHelper(this, "mybook.db", 21)
         binding.createdb.setOnClickListener {
             dbHelper.writableDatabase
@@ -112,32 +153,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun save(text: String) {
-        try {
-            val output = openFileOutput("mydata", Context.MODE_PRIVATE)
-            val writer = BufferedWriter(OutputStreamWriter(output))
-            writer.use {
-                it.write(text)
+    @SuppressLint("Range")
+    private fun queryDB() {
+        val dbHelper = MyDatabaseHelper(this, "mybook.db", 21)
+        val db = dbHelper.writableDatabase
+        binding.queryAll.setOnClickListener {
+            val cursor = db.query("Book", null, null, null, null, null, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val name = cursor.getString(cursor.getColumnIndex("name"))
+                    val pages = cursor.getString(cursor.getColumnIndex("pages"))
+                    val price = cursor.getString(cursor.getColumnIndex("price"))
+                    Log.d("MainQuery", "book name is $name")
+                    Log.d("MainQuery", "book pages is $pages")
+                    Log.d("MainQuery", "book price is $price")
+                } while (cursor.moveToNext())
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
+            cursor.close()
+        }
+
+        binding.queryOne.setOnClickListener {
+            val cursor = db.rawQuery("select * from Book where id=1", null)
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(cursor.getColumnIndex("name"))
+                Toast.makeText(this, "book name is $name", Toast.LENGTH_SHORT).show()
+            }
+            cursor.close()
         }
     }
 
-    private fun load(): String {
-        val content = StringBuilder()
-        try {
-            val input = openFileInput("mydata")
-            val reader = BufferedReader(InputStreamReader(input))
-            reader.use {
-                reader.forEachLine {
-                    content.append(it)
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return content.toString()
-    }
+
 }
