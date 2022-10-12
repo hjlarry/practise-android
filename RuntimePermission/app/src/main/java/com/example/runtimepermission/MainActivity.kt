@@ -1,6 +1,7 @@
 package com.example.runtimepermission
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
+    @SuppressLint("MissingInflatedId", "Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +34,19 @@ class MainActivity : AppCompatActivity() {
         readContact.setOnClickListener {
             val intent = Intent(this, ContactActivity::class.java)
             startActivity(intent)
+        }
+
+        val readApp = findViewById<View>(R.id.readMyapp)
+        readApp.setOnClickListener {
+            val uri = Uri.parse("content://com.example.storageapplication.MyDatabaseProvider/book/1")
+            val context = this
+            contentResolver.query(uri, null, null, null, null)?.apply {
+                while (moveToNext()) {
+                    val name = getString(getColumnIndex("name"))
+                    Toast.makeText(context, "Book name is $name", Toast.LENGTH_SHORT).show()
+                }
+                close()
+            }
         }
     }
 

@@ -4,6 +4,13 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <queries>
+        <provider android:authorities="com.example.storageapplication.MyDatabaseProvider" />
+    </queries>
 
     <application
         android:allowBackup="true"

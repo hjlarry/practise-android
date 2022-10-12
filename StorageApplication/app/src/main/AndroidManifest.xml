@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StorageApplication"
         tools:targetApi="31">
+        <provider
+            android:name=".MyDatabaseProvider"
+            android:authorities="com.example.storageapplication.MyDatabaseProvider"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
