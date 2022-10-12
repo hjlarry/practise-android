@@ -2,6 +2,7 @@ package com.example.learnkotlin
 
 
 import kotlin.collections.HashSet
+import kotlin.reflect.KProperty
 
 
 // 委托模式，自己实现一个Set，实际上用HashSet来实现
@@ -25,4 +26,24 @@ class MySet2<T>(val helperSet: HashSet<T>) : Set<T> by helperSet {
     fun customMethod() {
         println("hello world!")
     }
+}
+
+
+// 委托属性，类似于python的描述符
+class CustomClass {
+// 如果使用val来声明p变量，则不需要MyDelegate具备setValue方法
+    var p by MyDelegate()
+}
+
+class MyDelegate {
+    var propValue: Any? = null
+
+    operator fun getValue(myClass: CustomClass, property: KProperty<*>): Any? {
+        return propValue
+    }
+
+    operator fun setValue(myClass: CustomClass, property: KProperty<*>, value: Any?) {
+        propValue = value
+    }
+
 }
