@@ -1,6 +1,7 @@
 package com.example.learnkotlin
 
 
+import android.util.Log
 import kotlin.collections.HashSet
 import kotlin.reflect.KProperty
 
@@ -31,7 +32,7 @@ class MySet2<T>(val helperSet: HashSet<T>) : Set<T> by helperSet {
 
 // 委托属性，类似于python的描述符
 class CustomClass {
-// 如果使用val来声明p变量，则不需要MyDelegate具备setValue方法
+    // 如果使用val来声明p变量，则不需要MyDelegate具备setValue方法
     var p by MyDelegate()
 }
 
@@ -47,3 +48,23 @@ class MyDelegate {
     }
 
 }
+
+
+// 自己实现kotlin的lazy函数
+class MyLazy<T>(val block: () -> T) {
+    var value: Any? = null
+    operator fun getValue(any: Any?, property: KProperty<*>): T? {
+        if (value == null) {
+            value = block()
+        }
+        return value as T
+    }
+}
+
+fun <T> lazy2(block: () -> T) = MyLazy(block)
+val p by lazy2 {
+    Log.d("Tag", "run code inside the lazy block")
+    "test later"
+}
+
+
