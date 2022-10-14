@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,7 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
     private lateinit var imgUri: Uri
     private lateinit var outputImg: File
+    private val mediaPlayer = MediaPlayer()
 
     val startCap = registerForActivityResult(StartActivityForResult()) { result ->
         onActivityResult(1, result)
@@ -31,7 +33,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initMediaPlayer()
 
+        showPic()
+        playMusic()
+    }
+
+    private fun showPic() {
         val btn = findViewById<Button>(R.id.capture)
         btn.setOnClickListener {
             outputImg = File(externalCacheDir, "output_img.jpg")
@@ -76,4 +84,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initMediaPlayer() {
+        val assetManager = assets
+        val fd = assetManager.openFd("music.mp3")
+        mediaPlayer.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+        mediaPlayer.prepare()
+    }
+
+    private fun playMusic() {
+        val play = findViewById<Button>(R.id.play)
+        play.setOnClickListener {
+            if (!mediaPlayer.isPlaying()) {
+                mediaPlayer.start()
+            }
+        }
+
+        val pause = findViewById<Button>(R.id.pause)
+        pause.setOnClickListener {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause()
+            } else {
+                mediaPlayer.start()
+            }
+        }
+
+        val stop = findViewById<Button>(R.id.stop)
+        stop.setOnClickListener {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.reset()
+                initMediaPlayer()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
 }
