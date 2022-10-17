@@ -1,5 +1,6 @@
 package com.example.threadtest
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -34,6 +35,18 @@ class MainActivity : AppCompatActivity() {
                 msg.what = update_text
                 handler.sendMessage(msg)
             }
+        }
+
+        val startBtn = findViewById<Button>(R.id.startBtn)
+        startBtn.setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            startService(intent)
+        }
+
+        val stopBtn = findViewById<Button>(R.id.stopBtn)
+        stopBtn.setOnClickListener {
+            val intent = Intent(this, MyService::class.java)
+            stopService(intent)
         }
     }
 }
