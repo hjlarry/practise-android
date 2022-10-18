@@ -6,8 +6,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.google.gson.Gson
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import okio.IOException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
         val btn = findViewById<Button>(R.id.button)
         btn.setOnClickListener {
 //            sendRequestWithHttpURLConnection()
-            sendRequestWithOkHttp()
+//            sendRequestWithOkHttp()
+            useCallback()
         }
     }
 
@@ -91,5 +92,27 @@ class MainActivity : AppCompatActivity() {
             val resView = findViewById<TextView>(R.id.resText)
             resView.text = res
         }
+    }
+
+    private fun useCallback() {
+        HttpUtil.sendOkHttpRequest("https://www.baidu.com", object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val response = response.body.string()
+                showResponse(response)
+            }
+
+        })
+    }
+}
+
+object HttpUtil {
+    fun sendOkHttpRequest(address: String, callback: okhttp3.Callback) {
+        val client = OkHttpClient()
+        val request = Request.Builder().url(address).build()
+        client.newCall(request).enqueue(callback)
     }
 }
