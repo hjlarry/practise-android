@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 val responseData = response.body.string()
                 showResponse(responseData)
                 parseJsonWithJSONObject(responseData)
+                parseJsonWithGson(responseData)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -73,6 +75,15 @@ class MainActivity : AppCompatActivity() {
         val text = jsonObject.getString("text")
         Log.d("MyJson", "id is $id")
         Log.d("MyJson", "text is $text")
+    }
+
+    class Mycontent(val id: String, val text: String)
+
+    private fun parseJsonWithGson(jsonData: String) {
+        val gson = Gson()
+        val content = gson.fromJson(jsonData, Mycontent::class.java)
+        Log.d("MyJson1", "id is ${content.id}")
+        Log.d("MyJson1", "text is ${content.text}")
     }
 
     private fun showResponse(res: String) {
