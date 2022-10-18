@@ -2,10 +2,12 @@ package com.example.webtest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -53,14 +55,24 @@ class MainActivity : AppCompatActivity() {
         thread {
             try {
                 val client = OkHttpClient()
-                val request = Request.Builder().url("https://www.baidu.com").build()
+                val request =
+                    Request.Builder().url("https://www.freeapis.cn/api/v1/get/aiqing").build()
                 val response = client.newCall(request).execute()
                 val responseData = response.body.string()
                 showResponse(responseData)
+                parseJsonWithJSONObject(responseData)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun parseJsonWithJSONObject(jsonData: String) {
+        val jsonObject = JSONObject(jsonData)
+        val id = jsonObject.getString("code")
+        val text = jsonObject.getString("text")
+        Log.d("MyJson", "id is $id")
+        Log.d("MyJson", "text is $text")
     }
 
     private fun showResponse(res: String) {
