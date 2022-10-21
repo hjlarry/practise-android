@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.materialtest.databinding.ActivityMainBinding
 import com.example.materialtest.databinding.FruitItemBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +49,12 @@ class MainActivity : AppCompatActivity() {
         val adapter = FruitAdapter(this, fruitList)
         binding.recyclerView.adapter = adapter
 
+        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
+        binding.swipeRefresh.setOnRefreshListener {
+            refreshFruits(adapter)
+        }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -60,6 +67,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar, menu)
         return true
+    }
+
+    private fun refreshFruits(adapter: FruitAdapter){
+        thread {
+            Thread.sleep(2000)
+            runOnUiThread{
+                initFruits()
+                adapter.notifyDataSetChanged()
+                binding.swipeRefresh.isRefreshing = false
+            }
+        }
     }
 
     private fun initFruits() {
