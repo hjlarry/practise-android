@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.example.materialtest.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -24,6 +26,12 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener {
             binding.drawerLayout.closeDrawers()
             true
+        }
+
+        binding.fab.setOnClickListener {
+            Snackbar.make(it, "Data deleted!", Snackbar.LENGTH_SHORT).setAction("Undo") {
+                Toast.makeText(this, "Data restored", Toast.LENGTH_SHORT).show()
+            }.show()
         }
 
     }
