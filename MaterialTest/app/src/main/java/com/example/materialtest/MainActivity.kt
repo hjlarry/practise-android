@@ -1,6 +1,7 @@
 package com.example.materialtest
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -69,10 +70,10 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun refreshFruits(adapter: FruitAdapter){
+    private fun refreshFruits(adapter: FruitAdapter) {
         thread {
             Thread.sleep(2000)
-            runOnUiThread{
+            runOnUiThread {
                 initFruits()
                 adapter.notifyDataSetChanged()
                 binding.swipeRefresh.isRefreshing = false
@@ -116,7 +117,17 @@ class FruitAdapter(val context: Context, val fruitList: List<Fruit>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = FruitItemBinding.inflate(LayoutInflater.from(parent.context))
-        return ViewHolder(view)
+        val holder = ViewHolder(view)
+        holder.itemView.setOnClickListener {
+            val position = holder.adapterPosition
+            val fruit = fruitList[position]
+            val intent = Intent(context, FruitActivity::class.java).apply {
+                putExtra(FruitActivity.FRUIT_NAME, fruit.name)
+                putExtra(FruitActivity.FRUIT_IMAGE_ID, fruit.imageId)
+            }
+            context.startActivity(intent)
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
