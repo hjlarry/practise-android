@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.edit
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.jetpacktest.databinding.ActivityMainBinding
 
 
@@ -20,6 +20,23 @@ class MyViewModelFactory(private val countSaved: Int) : ViewModelProvider.Factor
     }
 }
 
+class MyObserver : DefaultLifecycleObserver {
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        Log.d("Myobserver", "activity create")
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
+        Log.d("Myobserver", "activity start")
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        super.onStop(owner)
+        Log.d("Myobserver", "activity stop")
+    }
+}
+
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MyModel
@@ -29,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lifecycle.addObserver(MyObserver())
 
         sp = getPreferences(Context.MODE_PRIVATE)
         val countSaved = sp.getInt("countSaved", 0)
