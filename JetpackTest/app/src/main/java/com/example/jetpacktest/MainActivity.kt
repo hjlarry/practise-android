@@ -11,7 +11,24 @@ import com.example.jetpacktest.databinding.ActivityMainBinding
 
 
 class MyModel(countSaved: Int) : ViewModel() {
-    var count = countSaved
+    val count: LiveData<Int>
+        get() = _count
+
+//   使_count只能通过内部来修改，外部无法给_count设置数据，保证ViewModel的数据封装性
+    private val _count = MutableLiveData<Int>()
+
+    init {
+        _count.value = countSaved
+    }
+
+    fun plusOne() {
+        val current = _count.value ?: 0
+        _count.value = current + 1
+    }
+
+    fun clear() {
+        _count.value = 0
+    }
 }
 
 class MyViewModelFactory(private val countSaved: Int) : ViewModelProvider.Factory {
@@ -55,17 +72,20 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, MyViewModelFactory(countSaved)).get(MyModel::class.java)
 
         binding.button.setOnClickListener {
-            viewModel.count++
-            refreshCount()
+            viewModel.plusOne()
+//            refreshCount()
         }
 
-        refreshCount()
+//        refreshCount()
+        viewModel.count.observe(this) {
+            binding.textInfo.text = it.toString()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         sp.edit {
-            putInt("countSaved", viewModel.count)
+            putInt("countSaved", viewModel.count.value ?: 0)
         }
     }
 
