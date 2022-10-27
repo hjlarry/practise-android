@@ -15,25 +15,22 @@ class RosterListFragment : Fragment() {
     private var binding: TodoRosterBinding? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = TodoRosterBinding.inflate(inflater, container, false)
-        .also { binding = it }
-        .root
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = TodoRosterBinding.inflate(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RosterAdapter(layoutInflater)
+        val adapter = RosterAdapter(layoutInflater) {
+            motor.save(it.copy(isCompleted = !it.isCompleted))
+        }
         binding?.items?.apply {
             setAdapter(adapter)
             layoutManager = LinearLayoutManager(context)
 
             addItemDecoration(
                 DividerItemDecoration(
-                    activity,
-                    DividerItemDecoration.VERTICAL
+                    activity, DividerItemDecoration.VERTICAL
                 )
             )
         }
