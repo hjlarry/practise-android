@@ -21,4 +21,8 @@ class ToDoRepository {
             items + model
         }
     }
+
+    fun find(modelId: String): ToDoModel? {
+        return items.find { it.id == modelId }
+    }
 }
