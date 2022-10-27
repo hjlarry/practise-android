@@ -7,14 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.*
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.example.jetpacktest.databinding.ActivityMainBinding
+import java.util.concurrent.TimeUnit
 
 
 class MyModel(countSaved: Int) : ViewModel() {
     val count: LiveData<Int>
         get() = _count
 
-//   使_count只能通过内部来修改，外部无法给_count设置数据，保证ViewModel的数据封装性
+    //   使_count只能通过内部来修改，外部无法给_count设置数据，保证ViewModel的数据封装性
     private val _count = MutableLiveData<Int>()
 
     init {
@@ -79,6 +82,12 @@ class MainActivity : AppCompatActivity() {
 //        refreshCount()
         viewModel.count.observe(this) {
             binding.textInfo.text = it.toString()
+        }
+
+        binding.button2.setOnClickListener {
+            val request =
+                PeriodicWorkRequest.Builder(SimpleWorker::class.java, 15, TimeUnit.MINUTES).build()
+            WorkManager.getInstance(this).enqueue(request)
         }
     }
 

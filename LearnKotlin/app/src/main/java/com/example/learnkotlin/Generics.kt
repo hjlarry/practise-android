@@ -35,3 +35,5 @@ fun <T> T.apply2(block: T.() -> Unit): T {
     block()
     return this
 }
+
+// 协变  逆变
