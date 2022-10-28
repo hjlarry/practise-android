@@ -1,10 +1,7 @@
 package com.commonsware.todo
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,6 +16,16 @@ class RosterListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = TodoRosterBinding.inflate(inflater, container, false).also { binding = it }.root
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.actions_roster, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +47,7 @@ class RosterListFragment : Fragment() {
         }
 
         adapter.submitList(motor.getItems())
-        binding?.empty?.visibility = View.GONE
+        binding?.empty?.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {
@@ -48,7 +55,21 @@ class RosterListFragment : Fragment() {
         super.onDestroyView()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.add -> {
+                add()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun display(model: ToDoModel) {
         findNavController().navigate(RosterListFragmentDirections.displayModel(model.id))
+    }
+
+    private fun add() {
+        findNavController().navigate(RosterListFragmentDirections.createModel(null))
     }
 }
