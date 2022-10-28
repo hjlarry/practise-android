@@ -8,4 +8,8 @@ class SingleModelMotor(private val repo: ToDoRepository, private val modelId: St
     fun save(model: ToDoModel) {
         repo.save(model)
     }
+
+    fun delete(model: ToDoModel) {
+        repo.delete(model)
+    }
 }
