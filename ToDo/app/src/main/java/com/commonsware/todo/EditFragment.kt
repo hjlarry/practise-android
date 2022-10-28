@@ -1,10 +1,9 @@
 package com.commonsware.todo
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.commonsware.todo.databinding.TodoEditBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,7 +17,7 @@ class EditFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -26,6 +25,11 @@ class EditFragment : Fragment() {
     ): View? {
         binding = TodoEditBinding.inflate(inflater, container, false)
         return binding?.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.actions_edit, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,5 +46,36 @@ class EditFragment : Fragment() {
     override fun onDestroyView() {
         binding = null
         super.onDestroyView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.save -> {
+                save()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun save() {
+        binding?.apply {
+            val model = motor.getModel()
+            val edited = model?.copy(
+                description = desc.text.toString(),
+                isCompleted = isCompleted.isChecked,
+                notes = notes.text.toString()
+            ) ?: ToDoModel(
+                description = desc.text.toString(),
+                isCompleted = isCompleted.isChecked,
+                notes = notes.text.toString()
+            )
+            edited.let { motor.save(it) }
+        }
+        navToDisplay()
+    }
+
+    private fun navToDisplay() {
+        findNavController().popBackStack()
     }
 }
