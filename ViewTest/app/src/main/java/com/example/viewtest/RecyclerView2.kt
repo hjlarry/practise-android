@@ -3,23 +3,31 @@ package com.example.viewtest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.viewtest.databinding.ActivityRecyclerView2Binding
 import com.example.viewtest.databinding.View2RowBinding
 import kotlin.random.Random
 
-class RecyclerView2 : AppCompatActivity() {
-    private val random = Random(0)
 
-    private fun buildItems() = List(25) { random.nextInt() }
+class ColorViewModel : ViewModel() {
+    private val random = Random(0)
+    val numbers = List(25) { random.nextInt() }
+}
+
+
+class RecyclerView2 : AppCompatActivity() {
+//    private val random = Random(0)
+//    private fun buildItems() = List(25) { random.nextInt() }
+
+    private val colorVm: ColorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +44,7 @@ class RecyclerView2 : AppCompatActivity() {
             )
 
             adapter = ColorAdapater(layoutInflater).apply {
-                submitList(buildItems())
+                submitList(colorVm.numbers)
             }
         }
     }
