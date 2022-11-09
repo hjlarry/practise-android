@@ -24,6 +24,9 @@
     <item android:id="@+id/recycleview2"
         android:title="Recycle View 2" />
 
+    <item android:id="@+id/recycleview3"
+        android:title="Recycle View 3" />
+
     <item android:id="@+id/chat"
         android:title="Chat" />
 </menu>

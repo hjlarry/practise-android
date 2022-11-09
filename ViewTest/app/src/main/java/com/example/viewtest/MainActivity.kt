@@ -82,6 +82,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, RecyclerView2::class.java))
             true
         }
+        R.id.recycleview3 ->{
+            startActivity(Intent(this, RecyclerView3::class.java))
+            true
+        }
         R.id.chat ->{
             startActivity(Intent(this, Chat::class.java))
             true
