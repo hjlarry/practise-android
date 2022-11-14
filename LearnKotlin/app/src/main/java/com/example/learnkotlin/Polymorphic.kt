@@ -1,5 +1,10 @@
 package com.example.learnkotlin
 
+interface Cry {
+    fun docry()
+}
+
+
 open class Animal(var age:Int) {
     var name = ""
 }
