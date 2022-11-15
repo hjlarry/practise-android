@@ -40,11 +40,9 @@ fun testDataClass() {
 enum class State {
     IDLE, RUNNING, FINISHED
 }
+
 enum class Color(val rgb: Int) {
-    RED(0xFF0000),
-    GREEN(0x00FF00),
-    BLUE(0x0000FF),
-    YELLOW(0xFFFF00);
+    RED(0xFF0000), GREEN(0x00FF00), BLUE(0x0000FF), YELLOW(0xFFFF00);
 
     fun containsRed() = (this.rgb and 0xFF0000 != 0)
 }
@@ -82,8 +80,47 @@ fun greetMammal(mammal: Mammal): String {
     }
 }
 
+/*
+object, 单例对象
+*/
+
+object DoAuth {
+    val x = 100
+    fun takeParams(username: String) {
+        println("input auth params is $username")
+    }
+}
+
+class Ben {
+    val yy = 100
+
+//  伴生对象类似于Java的静态成员，用于弥补kotlin中没有static关键字
+//  其名称Bonger可以省略
+    companion object Bonger {
+    fun getBon() {
+//            能获取到全局变量y，但是获取不到类成员
+            println(y)
+//            println(yy)
+        }
+    }
+}
+
+fun testObject() {
+    DoAuth.takeParams("hello")
+    println(DoAuth.x)
+
+    val abc = object {
+        val x = 10
+        val y = 20
+    }
+    val total = abc.x + abc.y
+    println(total)
+    Ben.getBon()
+}
+
 fun main() {
     testDataClass()
     testEnumClass()
     println(greetMammal(Cats("Snow")))
+    testObject()
 }
