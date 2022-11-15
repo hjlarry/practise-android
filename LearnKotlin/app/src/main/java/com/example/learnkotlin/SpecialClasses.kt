@@ -65,7 +65,25 @@ fun testEnumClass() {
     println(Color.BLUE.containsRed())
 }
 
+/*
+密封类，其本身属于抽象类，无法实例化，也有密封接口
+目的是限制类在包以外被继承
+同时，when也不需要else，这点和枚举类差不多
+*/
+sealed class Mammal(val name: String)
+
+class Cats(val catName: String) : Mammal(catName)
+class Human(val humanName: String, val job: String) : Mammal(humanName)
+
+fun greetMammal(mammal: Mammal): String {
+    when (mammal) {
+        is Human -> return "Hello ${mammal.name}; You're working as a ${mammal.job}"
+        is Cats -> return "Hello ${mammal.name}"
+    }
+}
+
 fun main() {
     testDataClass()
     testEnumClass()
+    println(greetMammal(Cats("Snow")))
 }
