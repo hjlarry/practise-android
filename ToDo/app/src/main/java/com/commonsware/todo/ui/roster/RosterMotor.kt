@@ -1,13 +1,25 @@
 package com.commonsware.todo.ui.roster
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.commonsware.todo.repo.ToDoModel
 import com.commonsware.todo.repo.ToDoRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class RosterMotor(private val repo: ToDoRepository) : ViewModel() {
-    fun save(model: ToDoModel) {
-        repo.save(model)
-    }
+    val states = repo.items().map { RosterViewState(it) }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, RosterViewState())
 
-    fun getItems() = repo.items
+    fun save(model: ToDoModel) {
+        viewModelScope.launch {
+            repo.save(model)
+        }
+    }
 }
+
+data class RosterViewState(
+    val items: List<ToDoModel> = listOf()
+)

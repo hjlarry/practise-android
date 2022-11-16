@@ -16,7 +16,8 @@ import java.util.UUID
 @Entity(tableName = "todos", indices = [Index(value = ["id"])])
 data class ToDoEntity(
     val description: String,
-    @PrimaryKey val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey
+    val id: String = UUID.randomUUID().toString(),
     val notes: String = "",
     val createdOn: Instant = Instant.now(),
     val isCompleted: Boolean = false,

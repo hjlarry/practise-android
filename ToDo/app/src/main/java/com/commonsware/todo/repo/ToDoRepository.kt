@@ -22,7 +22,7 @@ class ToDoRepository(private val store: ToDoEntity.Store, private val appScope: 
 
     fun items(): Flow<List<ToDoModel>> = store.all().map { all -> all.map { it.toModel() } }
 
-    fun find(modelId: String?): Flow<ToDoModel> {
-        return store.find(modelId).map { it.toModel() }
+    fun find(modelId: String?): Flow<ToDoModel?> {
+        return store.find(modelId).map { it?.toModel() }
     }
 }
