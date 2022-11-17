@@ -22,10 +22,18 @@ class ToDoRepository(private val store: ToDoEntity.Store, private val appScope: 
         }
     }
 
-    fun items(): Flow<List<ToDoModel>> =
-        store.all().map { all -> all.map { it.toModel() } }.onStart { delay(5000) }
+    private fun filteredEntities(filterMode: FilterMode) = when (filterMode) {
+        FilterMode.ALL -> store.all()
+        FilterMode.COMPLETED -> store.filtered(isCompleted = true)
+        FilterMode.OUTSTANDING -> store.filtered(isCompleted = false)
+    }
+
+    fun items(filterMode: FilterMode): Flow<List<ToDoModel>> =
+        filteredEntities(filterMode).map { all -> all.map { it.toModel() } }.onStart { delay(1000) }
 
     fun find(modelId: String?): Flow<ToDoModel?> {
         return store.find(modelId).map { it?.toModel() }
     }
 }
+
+enum class FilterMode { ALL, OUTSTANDING, COMPLETED }
