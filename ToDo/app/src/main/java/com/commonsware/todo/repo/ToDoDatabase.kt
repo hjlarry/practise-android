@@ -17,5 +17,9 @@ abstract class ToDoDatabase : RoomDatabase() {
         fun newInstance(context: Context): ToDoDatabase {
             return Room.databaseBuilder(context, ToDoDatabase::class.java, DB_NAME).build()
         }
+
+        fun newTestInstance(context: Context): ToDoDatabase {
+            return Room.inMemoryDatabaseBuilder(context, ToDoDatabase::class.java).build()
+        }
     }
 }
