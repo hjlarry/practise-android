@@ -55,8 +55,9 @@ class RosterListFragment : Fragment() {
             motor.states.collect { state ->
                 adapter.submitList(state.items)
                 binding?.apply {
+                    progressBar.visibility = if (state.isLoaded) View.GONE else View.VISIBLE
                     when {
-                        state.items.isEmpty() -> {
+                        state.items.isEmpty() && state.isLoaded -> {
                             empty.visibility = View.VISIBLE
                             empty.setText("Some thing empty")
                         }
@@ -65,8 +66,6 @@ class RosterListFragment : Fragment() {
                 }
             }
         }
-
-        binding?.empty?.visibility = View.GONE
     }
 
     override fun onDestroyView() {
