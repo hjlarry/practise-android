@@ -15,4 +15,10 @@
     <string name="menu_filter_completed">Completed</string>
     <string name="menu_filter_outstanding">Outstanding</string>
     <string name="msg_empty_filtered">Click the + icon to add a todo item, or change your filter to show other items</string>
+    <string name="report_template"><![CDATA[<h1>To-Do Items</h1>
+<h2></h2>
+<p><b>COMPLETED</b> &mdash; Created on: </p>
+<p></p>
+]]></string>
+    <string name="oops">Sorry! Something went wrong!</string>
 </resources>
