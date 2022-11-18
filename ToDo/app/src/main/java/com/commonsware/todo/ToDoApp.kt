@@ -11,6 +11,7 @@ import com.github.jknack.handlebars.Handlebars
 import com.github.jknack.handlebars.Helper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,7 +23,7 @@ import java.time.Instant
 class ToDoApp : Application() {
     private val koinModule = module {
         single { ToDoRepository(get<ToDoDatabase>().todoStore(), get(named("appScope"))) }
-        viewModel { RosterMotor(get(), get()) }
+        viewModel { RosterMotor(get(), get(), androidApplication(), get(named("appScope"))) }
         viewModel { (modelId: String) -> SingleModelMotor(get(), modelId) }
         single { ToDoDatabase.newInstance(androidContext()) }
         single(named("appScope")) { CoroutineScope(SupervisorJob()) }
