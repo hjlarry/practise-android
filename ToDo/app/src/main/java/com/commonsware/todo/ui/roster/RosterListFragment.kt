@@ -17,6 +17,8 @@ import com.commonsware.todo.RosterAdapter
 import com.commonsware.todo.databinding.TodoRosterBinding
 import com.commonsware.todo.repo.FilterMode
 import com.commonsware.todo.repo.ToDoModel
+import com.commonsware.todo.ui.ErrorDialogFragment
+import com.commonsware.todo.ui.ErrorScenario
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -97,6 +99,26 @@ class RosterListFragment : Fragment() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            motor.errorEvents.collect { error ->
+                when (error) {
+                    ErrorScenario.Import -> handleImportError()
+                }
+            }
+        }
+
+        findNavController().getBackStackEntry(R.id.rosterListFragment)
+            .savedStateHandle
+            .getLiveData<ErrorScenario>(ErrorDialogFragment.KEY_RETRY)
+            .observe(viewLifecycleOwner) { retryScenario ->
+                when (retryScenario) {
+                    ErrorScenario.Import -> {
+                        clearImportError()
+                        motor.importItems()
+                    }
+                }
+            }
     }
 
     override fun onDestroyView() {
@@ -174,6 +196,23 @@ class RosterListFragment : Fragment() {
         safeStartActivity(
             Intent(Intent.ACTION_SEND).setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .setType("text/html").putExtra(Intent.EXTRA_STREAM, doc)
+        )
+    }
+
+    private fun handleImportError() {
+        findNavController().navigate(
+            RosterListFragmentDirections.showError(
+                getString(R.string.import_error_title),
+                getString(R.string.import_error_message),
+                ErrorScenario.Import
+            )
+        )
+    }
+
+    private fun clearImportError() {
+        findNavController().getBackStackEntry(R.id.rosterListFragment).savedStateHandle.set(
+            ErrorDialogFragment.KEY_RETRY,
+            ErrorScenario.None
         )
     }
 }
