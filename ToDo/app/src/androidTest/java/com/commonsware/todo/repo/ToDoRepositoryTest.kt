@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
+import okhttp3.OkHttpClient
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.collection.IsIterableContainingInOrder.contains
@@ -27,14 +28,15 @@ class ToDoRepositoryTest {
 
   private val context = InstrumentationRegistry.getInstrumentation().targetContext
   private val db = ToDoDatabase.newTestInstance(context)
+  private val remoteDateSource = ToDoRemoteDateSource(OkHttpClient())
 
   @Test
   fun canAddItems() = runBlockingTest {
-    val underTest = ToDoRepository(db.todoStore(), this)
+    val underTest = ToDoRepository(db.todoStore(), this, remoteDateSource)
     val results = mutableListOf<List<ToDoModel>>()
 
     val itemsJob = launch {
-      underTest.items().collect { results.add(it) }
+      underTest.items(FilterMode.ALL).collect { results.add(it) }
     }
 
     assertThat(results.size, equalTo(1))
@@ -53,13 +55,13 @@ class ToDoRepositoryTest {
 
   @Test
   fun canModifyItems() = runBlockingTest {
-    val underTest = ToDoRepository(db.todoStore(), this)
+    val underTest = ToDoRepository(db.todoStore(), this, remoteDateSource)
     val testModel = ToDoModel("test model")
     val replacement = testModel.copy(notes = "This is the replacement")
     val results = mutableListOf<List<ToDoModel>>()
 
     val itemsJob = launch {
-      underTest.items().collect { results.add(it) }
+      underTest.items(FilterMode.ALL).collect { results.add(it) }
     }
 
     assertThat(results[0], empty())
@@ -75,12 +77,12 @@ class ToDoRepositoryTest {
 
   @Test
   fun canRemoveItems() = runBlockingTest {
-    val underTest = ToDoRepository(db.todoStore(), this)
+    val underTest = ToDoRepository(db.todoStore(), this, remoteDateSource)
     val testModel = ToDoModel("test model")
     val results = mutableListOf<List<ToDoModel>>()
 
     val itemsJob = launch {
-      underTest.items().collect { results.add(it) }
+      underTest.items(FilterMode.ALL).collect { results.add(it) }
     }
 
     assertThat(results[0], empty())

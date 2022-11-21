@@ -7,7 +7,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 
-class ToDoRepository(private val store: ToDoEntity.Store, private val appScope: CoroutineScope) {
+class ToDoRepository(
+    private val store: ToDoEntity.Store,
+    private val appScope: CoroutineScope,
+    private val remoteDateSource: ToDoRemoteDateSource
+) {
     var items = emptyList<ToDoModel>()
 
     suspend fun save(model: ToDoModel) {
@@ -33,6 +37,12 @@ class ToDoRepository(private val store: ToDoEntity.Store, private val appScope: 
 
     fun find(modelId: String?): Flow<ToDoModel?> {
         return store.find(modelId).map { it?.toModel() }
+    }
+
+    suspend fun importItems(url: String) {
+        withContext(appScope.coroutineContext) {
+            store.importItems(remoteDateSource.load(url).map { it.toEntity() })
+        }
     }
 }
 
